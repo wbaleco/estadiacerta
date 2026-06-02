@@ -335,7 +335,7 @@ export default function App() {
           <h1 className="font-sans font-extrabold text-[28px] tracking-tight uppercase leading-tight text-white">
             Estadia<span className="text-primary-container">Certa</span>
           </h1>
-          <p className="text-on-surface-variant text-sm font-mono tracking-widest uppercase mt-1">
+          <p className="text-on-surface-variant text-sm font-mono tracking-widest uppercase mt-1 mb-6">
             Plataforma de Alta Visibilidade
           </p>
         </div>
@@ -563,7 +563,7 @@ export default function App() {
           <h1 className="font-sans font-extrabold text-[28px] tracking-tight uppercase leading-tight text-white">
             Estadia<span className="text-primary-container">Certa</span>
           </h1>
-          <p className="text-on-surface-variant text-sm font-mono tracking-widest uppercase mt-1">
+          <p className="text-on-surface-variant text-sm font-mono tracking-widest uppercase mt-1 mb-6">
             Plataforma de Alta Visibilidade
           </p>
         </div>
