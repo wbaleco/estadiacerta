@@ -367,107 +367,107 @@ Gerado eletronicamente conforme Lei nº 11.442/2007 via Painel de Controle Estad
               <title>${isAntt ? 'Faturamento Lei ANTT/11.442' : 'Faturamento de Estadia'}</title>
               <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
               <style>
-                body {
-                  font-family: 'Hanken Grotesk', sans-serif;
-                  background-color: #ffffff;
-                  color: #1a1a1a;
-                  margin: 0;
-                  padding: 40px;
-                  font-size: 14px;
-                  line-height: 1.6;
-                  -webkit-print-color-adjust: exact;
-                  print-color-adjust: exact;
-                }
-                .container {
-                  max-width: 800px;
-                  margin: 0 auto;
-                }
-                .header {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  border-bottom: 3px solid #facd33;
-                  padding-bottom: 20px;
-                  margin-bottom: 30px;
-                }
-                .logo-section h1 {
-                  font-size: 28px;
-                  font-weight: 800;
-                  margin: 0;
-                  color: #131313;
-                  text-transform: uppercase;
-                  letter-spacing: -0.5px;
-                }
-                .logo-section h1 span {
-                  color: #facd33;
-                  background-color: #131313;
-                  padding: 2px 8px;
-                  border-radius: 4px;
-                  margin-left: 2px;
-                }
-                .logo-section p {
-                  margin: 5px 0 0 0;
-                  font-size: 11px;
-                  font-family: 'JetBrains Mono', monospace;
-                  color: #666;
-                  text-transform: uppercase;
-                  letter-spacing: 1px;
-                }
-                .receipt-type {
-                  text-align: right;
-                }
-                .badge {
-                  background-color: #facd33;
-                  color: #131313;
-                  font-family: 'JetBrains Mono', monospace;
-                  font-size: 10px;
-                  font-weight: 700;
-                  padding: 5px 12px;
-                  border-radius: 20px;
-                  text-transform: uppercase;
-                  display: inline-block;
-                  margin-bottom: 5px;
-                }
-                .receipt-date {
-                  font-size: 12px;
-                  color: #666;
-                }
-                .total-card {
-                  background: #fdfaf2;
-                  border: 2px dashed #facd33;
-                  border-radius: 16px;
-                  padding: 24px;
-                  text-align: center;
-                  margin-bottom: 30px;
-                }
-                .total-card p {
-                  margin: 0;
-                  font-size: 12px;
-                  font-family: 'JetBrains Mono', monospace;
-                  text-transform: uppercase;
-                  color: #666;
-                  letter-spacing: 1px;
-                }
-                .total-card .amount {
-                  font-size: 36px;
-                  font-weight: 800;
-                  color: #131313;
-                  margin: 10px 0;
-                }
-                .section-title {
-                  font-family: 'JetBrains Mono', monospace;
-                  font-size: 11px;
-                  font-weight: 700;
-                  color: #facd33;
-                  background: #131313;
-                  padding: 6px 12px;
-                  border-radius: 4px;
-                  margin-top: 30px;
-                  margin-bottom: 15px;
-                  text-transform: uppercase;
-                  letter-spacing: 1px;
-                  display: inline-block;
-                }
+                 body {
+                   font-family: 'Hanken Grotesk', sans-serif;
+                   background-color: #ffffff;
+                   color: #1a1a1a;
+                   margin: 0;
+                   padding: 20px 30px;
+                   font-size: 13px;
+                   line-height: 1.5;
+                   -webkit-print-color-adjust: exact;
+                   print-color-adjust: exact;
+                 }
+                 .container {
+                   max-width: 800px;
+                   margin: 0 auto;
+                 }
+                 .header {
+                   display: flex;
+                   justify-content: space-between;
+                   align-items: center;
+                   border-bottom: 3px solid #facd33;
+                   padding-bottom: 15px;
+                   margin-bottom: 15px;
+                 }
+                 .logo-section h1 {
+                   font-size: 26px;
+                   font-weight: 800;
+                   margin: 0;
+                   color: #131313;
+                   text-transform: uppercase;
+                   letter-spacing: -0.5px;
+                 }
+                 .logo-section h1 span {
+                   color: #facd33;
+                   background-color: #131313;
+                   padding: 2px 8px;
+                   border-radius: 4px;
+                   margin-left: 2px;
+                 }
+                 .logo-section p {
+                   margin: 5px 0 0 0;
+                   font-size: 10px;
+                   font-family: 'JetBrains Mono', monospace;
+                   color: #666;
+                   text-transform: uppercase;
+                   letter-spacing: 1px;
+                 }
+                 .receipt-type {
+                   text-align: right;
+                 }
+                 .badge {
+                   background-color: #facd33;
+                   color: #131313;
+                   font-family: 'JetBrains Mono', monospace;
+                   font-size: 10px;
+                   font-weight: 700;
+                   padding: 5px 12px;
+                   border-radius: 20px;
+                   text-transform: uppercase;
+                   display: inline-block;
+                   margin-bottom: 5px;
+                 }
+                 .receipt-date {
+                   font-size: 11px;
+                   color: #666;
+                 }
+                 .total-card {
+                   background: #fdfaf2;
+                   border: 2px dashed #facd33;
+                   border-radius: 16px;
+                   padding: 24px;
+                   text-align: center;
+                   margin-bottom: 30px;
+                 }
+                 .total-card p {
+                   margin: 0;
+                   font-size: 12px;
+                   font-family: 'JetBrains Mono', monospace;
+                   text-transform: uppercase;
+                   color: #666;
+                   letter-spacing: 1px;
+                 }
+                 .total-card .amount {
+                   font-size: 36px;
+                   font-weight: 800;
+                   color: #131313;
+                   margin: 10px 0;
+                 }
+                 .section-title {
+                   font-family: 'JetBrains Mono', monospace;
+                   font-size: 10px;
+                   font-weight: 700;
+                   color: #facd33;
+                   background: #131313;
+                   padding: 5px 10px;
+                   border-radius: 4px;
+                   margin-top: 15px;
+                   margin-bottom: 10px;
+                   text-transform: uppercase;
+                   letter-spacing: 1px;
+                   display: inline-block;
+                 }
                 .grid {
                   display: grid;
                   grid-template-columns: repeat(2, 1fr);
@@ -563,14 +563,10 @@ Gerado eletronicamente conforme Lei nº 11.442/2007 via Painel de Controle Estad
                   </div>
                 </div>
 
-                <div class="total-card" style="background-color: #fdfaf2 !important; border: 2px dashed #facd33 !important;">
-                  <p>VALOR DE RECLAMAÇÃO DE PERMANÊNCIA</p>
-                  <div class="amount">R$ ${finalAmt.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                  <p style="font-size: 11px; color: #888;">Cálculo oficial gerado pelo aplicativo EstadiaCerta</p>
-                </div>
+                <div style="margin-bottom: 15px;"></div>
 
                 <div>
-                  <div class="section-title" style="background-color: #131313 !important; color: #facd33 !important;">Qualificação do Motorista</div>
+                  <div class="section-title" style="background-color: #131313 !important; color: #facd33 !important; margin-top: 10px !important;">Qualificação do Motorista</div>
                   <div class="grid">
                     <div class="info-block">
                       <label>NOME DO MOTORISTA</label>
