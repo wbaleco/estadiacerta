@@ -85,9 +85,9 @@ const INITIAL_JOURNEY: ActiveJourney = {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('inicio');
-  const [profile, setProfile] = useState<DriverProfile>(() => {
+  const [profile, setProfile] = useState<DriverProfile | null>(() => {
     const saved = localStorage.getItem('driver_profile');
-    return saved ? JSON.parse(saved) : INITIAL_PROFILE;
+    return saved ? JSON.parse(saved) : null;
   });
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     const saved = localStorage.getItem('driver_history');
@@ -101,6 +101,15 @@ export default function App() {
   const [isLoggedOut, setIsLoggedOut] = useState<boolean>(() => {
     return localStorage.getItem('driver_logged_out') === 'true';
   });
+
+  // Registration Form States
+  const [regName, setRegName] = useState('');
+  const [regCpf, setRegCpf] = useState('');
+  const [regCnh, setRegCnh] = useState('');
+  const [regTruck, setRegTruck] = useState('');
+  const [regPlateCavalo, setRegPlateCavalo] = useState('');
+  const [regPlateCarreta, setRegPlateCarreta] = useState('');
+  const [regAnttRate, setRegAnttRate] = useState(2.50);
 
   const [notif, setNotif] = useState<{ show: boolean; msg: string; type: 'success' | 'info' }>({
     show: false,
@@ -135,8 +144,9 @@ export default function App() {
 
   // Toggle driver Online/Offline indicator
   const handleToggleOnline = () => {
+    if (!profile) return;
     const newOnline = !profile.isOnline;
-    setProfile(prev => ({ ...prev, isOnline: newOnline }));
+    setProfile(prev => prev ? ({ ...prev, isOnline: newOnline }) : null);
     triggerNotification(
       newOnline 
         ? 'Você está ONLINE na rede de monitoramento de cargas.' 
@@ -193,7 +203,7 @@ export default function App() {
     const effectiveHours = excludeTime ? Math.max(0, hoursNum - 5) : hoursNum;
     
     let finalAmount = 0;
-    const currentAnttRate = profile.anttRate || 2.50;
+    const currentAnttRate = profile?.anttRate || 2.50;
     if (activeJourney.billingType === 'ANTT') {
       const tons = activeJourney.truckCapacityTons ?? 12;
       finalAmount = Math.round((effectiveHours * tons * currentAnttRate) * 100) / 100;
@@ -233,8 +243,44 @@ export default function App() {
 
   // Update Profile attributes
   const handleUpdateProfile = (updatedFields: Partial<DriverProfile>) => {
-    setProfile(prev => ({ ...prev, ...updatedFields }));
+    setProfile(prev => prev ? ({ ...prev, ...updatedFields }) : null);
     triggerNotification('Dados cadastrais atualizados com sucesso!');
+  };
+
+  // Onboarding registration submission
+  const handleRegisterSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!regName || !regCpf || !regCnh || !regTruck || !regPlateCavalo || !regPlateCarreta) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+    const newProfile: DriverProfile = {
+      name: regName.split(' ')[0].toUpperCase() + (regName.split(' ')[1] ? ' ' + regName.split(' ')[1].toUpperCase() : ''),
+      fullName: regName,
+      cpf: regCpf,
+      cnh: regCnh,
+      avatarUrl: INITIAL_PROFILE.avatarUrl,
+      truckModel: regTruck,
+      truckImageUrl: INITIAL_PROFILE.truckImageUrl,
+      plateCavalo: regPlateCavalo.toUpperCase(),
+      plateCarreta: regPlateCarreta.toUpperCase(),
+      isOnline: true,
+      anttRate: regAnttRate || 2.50
+    };
+    setProfile(newProfile);
+    triggerNotification('Cadastro realizado com sucesso! Bem-vindo ao EstadiaCerta.');
+  };
+
+  // Prefill registration with demo data for quick testing
+  const handlePrefillDemo = () => {
+    setRegName(INITIAL_PROFILE.fullName);
+    setRegCpf(INITIAL_PROFILE.cpf);
+    setRegCnh(INITIAL_PROFILE.cnh);
+    setRegTruck(INITIAL_PROFILE.truckModel);
+    setRegPlateCavalo(INITIAL_PROFILE.plateCavalo);
+    setRegPlateCarreta(INITIAL_PROFILE.plateCarreta);
+    setRegAnttRate(INITIAL_PROFILE.anttRate || 2.50);
+    triggerNotification('Dados de teste preenchidos. Basta clicar em Cadastrar!', 'info');
   };
 
   // Clear History backlog
@@ -252,12 +298,197 @@ export default function App() {
     triggerNotification('Estadia excluída com sucesso.', 'info');
   };
 
+  // Mask helper functions for premium registration UX
+  const formatCPF = (value: string) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+    if (numbers.length <= 9) return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`;
+  };
+
+  const formatPlaca = (value: string) => {
+    const clean = value.replace(/[^a-zA-Z0-9]/g, '').slice(0, 7).toUpperCase();
+    if (clean.length <= 3) return clean;
+    return `${clean.slice(0, 3)}-${clean.slice(3)}`;
+  };
+
   // Lockscreen Simulated Authentication Click
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
     setIsLoggedOut(false);
-    triggerNotification('Bem-vindo de volta, ' + profile.fullName + '!');
+    triggerNotification('Bem-vindo de volta, ' + profile?.fullName + '!');
   };
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-background text-on-surface bg-safety-mesh flex flex-col justify-between p-6 md:p-12 font-sans animate-fade-in">
+        {/* Top Branding Header */}
+        <div className="flex flex-col items-center justify-center pt-8 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-[0_0_30px_rgba(250,205,51,0.2)] mb-4">
+            <Truck className="w-9 h-9 animate-pulse" />
+          </div>
+          <h1 className="font-sans font-extrabold text-[28px] tracking-tight uppercase leading-tight text-white">
+            Estadia<span className="text-primary-container">Certa</span>
+          </h1>
+          <p className="text-on-surface-variant text-sm font-mono tracking-widest uppercase mt-1">
+            Plataforma de Alta Visibilidade
+          </p>
+        </div>
+
+        {/* Onboarding Registration Form Card */}
+        <div className="max-w-xl w-full mx-auto bg-surface-card border border-outline-variant/40 rounded-3xl p-8 flex flex-col shadow-xl gap-6 mt-6 mb-6">
+          <div className="text-center">
+            <span className="text-primary-container font-mono text-[11px] tracking-wider uppercase font-bold bg-primary-container/10 px-3 py-1.5 rounded-full border border-primary-container/20">
+              CADASTRO DE MOTORISTA
+            </span>
+            <h2 className="font-sans font-extrabold text-2xl text-on-surface mt-3">
+              Crie sua Conta Local
+            </h2>
+            <p className="text-xs text-on-surface-variant leading-relaxed mt-2 max-w-sm mx-auto">
+              Seus dados de motorista e veículo serão salvos com privacidade absoluta 100% no seu dispositivo (offline-first).
+            </p>
+          </div>
+
+          <form onSubmit={handleRegisterSubmit} className="space-y-4">
+            {/* Nome Completo */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Nome Completo *
+              </label>
+              <input 
+                type="text"
+                required
+                placeholder="Ex: João Silva dos Santos"
+                value={regName}
+                onChange={(e) => setRegName(e.target.value)}
+                className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-semibold font-sans text-on-surface focus:outline-none focus:border-safety-yellow transition-all"
+              />
+            </div>
+
+            {/* Grid CPF & CNH */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5 text-left">
+                <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                  CPF *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="000.000.000-00"
+                  value={regCpf}
+                  onChange={(e) => setRegCpf(formatCPF(e.target.value))}
+                  maxLength={14}
+                  className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all text-sm"
+                />
+              </div>
+
+              <div className="space-y-1.5 text-left">
+                <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                  CNH (Categoria E) *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="Apenas números"
+                  value={regCnh}
+                  onChange={(e) => setRegCnh(e.target.value.replace(/\D/g, '').slice(0, 11))}
+                  maxLength={11}
+                  className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Modelo do Caminhão */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Modelo do Caminhão *
+              </label>
+              <input 
+                type="text"
+                required
+                placeholder="Ex: Scania R500"
+                value={regTruck}
+                onChange={(e) => setRegTruck(e.target.value)}
+                className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-semibold font-sans text-on-surface focus:outline-none focus:border-safety-yellow transition-all"
+              />
+            </div>
+
+            {/* Grid Placas */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5 text-left">
+                <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                  Placa Cavalo *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="AAA-9A99"
+                  value={regPlateCavalo}
+                  onChange={(e) => setRegPlateCavalo(formatPlaca(e.target.value))}
+                  maxLength={8}
+                  className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all uppercase text-sm"
+                />
+              </div>
+
+              <div className="space-y-1.5 text-left">
+                <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                  Placa Carreta *
+                </label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="CAR-4F20"
+                  value={regPlateCarreta}
+                  onChange={(e) => setRegPlateCarreta(formatPlaca(e.target.value))}
+                  maxLength={8}
+                  className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all uppercase text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Taxa ANTT / Tonelada Hora */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Taxa ANTT Base por Tonelada/Hora (R$)
+              </label>
+              <input 
+                type="number"
+                step="0.01"
+                min="0.10"
+                value={regAnttRate}
+                onChange={(e) => setRegAnttRate(parseFloat(e.target.value) || 2.50)}
+                className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all text-sm"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full h-14 bg-primary-container hover:bg-safety-yellow text-on-primary font-mono text-xs tracking-widest uppercase rounded-xl font-bold transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-98 mt-6"
+            >
+              <CheckCircle className="w-4 h-4" /> Concluir e Entrar
+            </button>
+          </form>
+
+          {/* Quick Demo Option for testing */}
+          <div className="w-full h-[1px] bg-outline-variant/35 my-2"></div>
+          <button
+            onClick={handlePrefillDemo}
+            className="w-full py-3 bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/50 text-on-surface-variant hover:text-white font-mono text-[10px] uppercase font-bold tracking-wider rounded-xl cursor-pointer transition-all active:scale-98"
+          >
+            Preencher com Dados de Teste Rápidos
+          </button>
+        </div>
+
+        {/* Branding Footer */}
+        <div className="flex flex-col items-center text-center pb-4">
+          <p className="text-[9px] text-on-surface-variant/50 font-mono">
+            © 2026 ESTADIACERTA. TODOS OS DIREITOS RESERVADOS. PRIVACIDADE E SEGURANÇA CERTIFICADA.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoggedOut) {
     return (
@@ -387,6 +618,25 @@ export default function App() {
             onLogout={() => {
               setIsLoggedOut(true);
               triggerNotification('Você saiu da conta com sucesso.', 'info');
+            }}
+            onResetApp={() => {
+              localStorage.removeItem('driver_profile');
+              localStorage.removeItem('driver_history');
+              localStorage.removeItem('driver_journey');
+              localStorage.removeItem('driver_logged_out');
+              setProfile(null);
+              setHistory(INITIAL_HISTORY);
+              setActiveJourney(INITIAL_JOURNEY);
+              setIsLoggedOut(false);
+              setRegName('');
+              setRegCpf('');
+              setRegCnh('');
+              setRegTruck('');
+              setRegPlateCavalo('');
+              setRegPlateCarreta('');
+              setRegAnttRate(2.50);
+              setActiveTab('inicio');
+              triggerNotification('Aplicativo reiniciado com sucesso. Todos os dados foram limpos.', 'info');
             }}
           />
         )}

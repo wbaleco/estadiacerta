@@ -18,7 +18,8 @@ import {
   Camera as CameraIcon,
   Coins,
   Scale,
-  ShieldCheck
+  ShieldCheck,
+  RotateCcw
 } from 'lucide-react';
 import { DriverProfile, HistoryEntry } from '../types';
 
@@ -28,9 +29,10 @@ interface PerfilTabProps {
   onUpdateProfile: (updated: Partial<DriverProfile>) => void;
   onImportHistory: (imported: HistoryEntry[]) => void;
   onLogout: () => void;
+  onResetApp: () => void;
 }
 
-export default function PerfilTab({ profile, history, onUpdateProfile, onImportHistory, onLogout }: PerfilTabProps) {
+export default function PerfilTab({ profile, history, onUpdateProfile, onImportHistory, onLogout, onResetApp }: PerfilTabProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(profile.fullName);
   const [editedCpf, setEditedCpf] = useState(profile.cpf);
@@ -483,13 +485,24 @@ export default function PerfilTab({ profile, history, onUpdateProfile, onImportH
       </section>
 
       {/* SECTION 6: ACTIONS */}
-      <section className="pt-4">
+      <section className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button 
           onClick={onLogout}
-          className="w-full h-16 border-2 border-status-critical text-status-critical hover:bg-status-critical/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-3 rounded-xl uppercase tracking-wider font-mono text-xs font-bold shadow-md cursor-pointer"
+          className="w-full h-16 border-2 border-status-critical text-status-critical hover:bg-status-critical/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-3 rounded-xl uppercase tracking-wider font-mono text-xs font-bold shadow-md cursor-pointer animate-fade-in"
         >
           <LogOut className="w-4.5 h-4.5" />
           Sair da Conta
+        </button>
+        <button 
+          onClick={() => {
+            if (confirm('Atenção: Isso irá apagar permanentemente todos os seus dados locais e histórico. Deseja continuar?')) {
+              onResetApp();
+            }
+          }}
+          className="w-full h-16 border-2 border-outline-variant/60 hover:border-safety-yellow text-on-surface-variant hover:text-white hover:bg-surface-container-high active:scale-98 transition-all duration-150 flex items-center justify-center gap-3 rounded-xl uppercase tracking-wider font-mono text-xs font-bold shadow-md cursor-pointer"
+        >
+          <RotateCcw className="w-4.5 h-4.5 text-safety-yellow" />
+          Reiniciar Aplicativo
         </button>
       </section>
 
