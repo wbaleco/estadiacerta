@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-background: #131313;
+  --color-surface: #131313;
+  --color-surface-card: #242424;
+  --color-surface-elevated: #1A1A1A;
+  --color-surface-container: #201f1f;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #d1c5ad;
+  --color-primary: #ffedc0;
+  --color-primary-container: #facd33;
+  --color-on-primary: #3c2f00;
+  --color-on-primary-container: #6e5700;
+  --color-secondary: #ffb77d;
+  --color-secondary-container: #fd8b00;
+  --color-status-critical: #E20000;
+  --color-status-success: #00C853;
+  --color-safety-yellow: #FFD700;
+  --color-outline-variant: #4d4633;
+  --color-error: #ffb4ab;
+
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Custom background pattern for high visibility */
+.bg-safety-mesh {
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 215, 0, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.hero-glow {
+  box-shadow: 0 0 40px rgba(250, 205, 51, 0.25);
+}
+
+.hero-glow-critical {
+  box-shadow: 0 0 40px rgba(226, 0, 0, 0.25);
+}
+
+/* Hide scrollbars but keep swipeability list active */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom transitions and states */
+button, input, a {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
