@@ -530,7 +530,7 @@ export default function App() {
               <input 
                 type="text"
                 required
-                pattern="\\d{4}"
+                pattern="[0-9]{4}"
                 placeholder="Ex: 1234"
                 value={regPin}
                 onChange={(e) => setRegPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
