@@ -110,6 +110,8 @@ export default function App() {
   const [regPlateCavalo, setRegPlateCavalo] = useState('');
   const [regPlateCarreta, setRegPlateCarreta] = useState('');
   const [regAnttRate, setRegAnttRate] = useState(2.50);
+  const [regAvatarUrl, setRegAvatarUrl] = useState(INITIAL_PROFILE.avatarUrl);
+  const [regTruckImageUrl, setRegTruckImageUrl] = useState(INITIAL_PROFILE.truckImageUrl);
 
   const [notif, setNotif] = useState<{ show: boolean; msg: string; type: 'success' | 'info' }>({
     show: false,
@@ -259,9 +261,9 @@ export default function App() {
       fullName: regName,
       cpf: regCpf,
       cnh: regCnh,
-      avatarUrl: INITIAL_PROFILE.avatarUrl,
+      avatarUrl: regAvatarUrl || INITIAL_PROFILE.avatarUrl,
       truckModel: regTruck,
-      truckImageUrl: INITIAL_PROFILE.truckImageUrl,
+      truckImageUrl: regTruckImageUrl || INITIAL_PROFILE.truckImageUrl,
       plateCavalo: regPlateCavalo.toUpperCase(),
       plateCarreta: regPlateCarreta.toUpperCase(),
       isOnline: true,
@@ -280,6 +282,8 @@ export default function App() {
     setRegPlateCavalo(INITIAL_PROFILE.plateCavalo);
     setRegPlateCarreta(INITIAL_PROFILE.plateCarreta);
     setRegAnttRate(INITIAL_PROFILE.anttRate || 2.50);
+    setRegAvatarUrl(INITIAL_PROFILE.avatarUrl);
+    setRegTruckImageUrl(INITIAL_PROFILE.truckImageUrl);
     triggerNotification('Dados de teste preenchidos. Basta clicar em Cadastrar!', 'info');
   };
 
@@ -366,6 +370,35 @@ export default function App() {
               />
             </div>
 
+            {/* Foto do Motorista */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Foto de Perfil do Motorista (Opcional)
+              </label>
+              <div className="flex items-center gap-3 bg-background border border-outline-variant/60 rounded-xl p-3">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-container bg-surface-container shrink-0">
+                  <img src={regAvatarUrl} alt="Preview" className="w-full h-full object-cover" />
+                </div>
+                <label className="flex-1 h-10 bg-surface-container-high hover:bg-surface-container-highest text-white font-mono text-[10px] font-extrabold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98 text-center leading-[38px]">
+                  Selecionar Foto Motorista
+                  <input 
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (!files || files.length === 0) return;
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        if (event.target?.result) setRegAvatarUrl(event.target.result as string);
+                      };
+                      reader.readAsDataURL(files[0]);
+                    }}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            </div>
+
             {/* Grid CPF & CNH */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5 text-left">
@@ -412,6 +445,35 @@ export default function App() {
                 onChange={(e) => setRegTruck(e.target.value)}
                 className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-semibold font-sans text-on-surface focus:outline-none focus:border-safety-yellow transition-all"
               />
+            </div>
+
+            {/* Foto do Caminhão */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Foto do Caminhão (Opcional)
+              </label>
+              <div className="flex items-center gap-3 bg-background border border-outline-variant/60 rounded-xl p-3">
+                <div className="w-16 h-10 rounded-lg overflow-hidden border-2 border-secondary bg-surface-container shrink-0">
+                  <img src={regTruckImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                </div>
+                <label className="flex-1 h-10 bg-surface-container-high hover:bg-surface-container-highest text-white font-mono text-[10px] font-extrabold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98 text-center leading-[38px]">
+                  Selecionar Foto Caminhão
+                  <input 
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (!files || files.length === 0) return;
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        if (event.target?.result) setRegTruckImageUrl(event.target.result as string);
+                      };
+                      reader.readAsDataURL(files[0]);
+                    }}
+                    className="hidden"
+                  />
+                </label>
+              </div>
             </div>
 
             {/* Grid Placas */}
@@ -635,6 +697,8 @@ export default function App() {
               setRegPlateCavalo('');
               setRegPlateCarreta('');
               setRegAnttRate(2.50);
+              setRegAvatarUrl(INITIAL_PROFILE.avatarUrl);
+              setRegTruckImageUrl(INITIAL_PROFILE.truckImageUrl);
               setActiveTab('inicio');
               triggerNotification('Aplicativo reiniciado com sucesso. Todos os dados foram limpos.', 'info');
             }}
