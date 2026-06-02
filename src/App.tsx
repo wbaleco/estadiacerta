@@ -393,7 +393,7 @@ export default function App() {
                   <img src={regAvatarUrl} alt="Preview" className="w-full h-full object-cover" />
                 </div>
                 <label className="flex-1 h-10 bg-surface-container-high hover:bg-surface-container-highest text-white font-mono text-[10px] font-extrabold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98 text-center leading-[38px]">
-                  Selecionar Foto Motorista
+                  Escolher Foto
                   <input 
                     type="file"
                     accept="image/*"
@@ -470,7 +470,7 @@ export default function App() {
                   <img src={regTruckImageUrl} alt="Preview" className="w-full h-full object-cover" />
                 </div>
                 <label className="flex-1 h-10 bg-surface-container-high hover:bg-surface-container-highest text-white font-mono text-[10px] font-extrabold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98 text-center leading-[38px]">
-                  Selecionar Foto Caminhão
+                  Escolher Foto
                   <input 
                     type="file"
                     accept="image/*"
