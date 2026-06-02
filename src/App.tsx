@@ -29,7 +29,8 @@ const INITIAL_PROFILE: DriverProfile = {
   plateCavalo: 'BRA-2E19',
   plateCarreta: 'CAR-4F20',
   isOnline: true,
-  anttRate: 2.50
+  anttRate: 2.50,
+  pin: '1234'
 };
 
 const INITIAL_HISTORY: HistoryEntry[] = [
@@ -112,6 +113,8 @@ export default function App() {
   const [regAnttRate, setRegAnttRate] = useState(2.50);
   const [regAvatarUrl, setRegAvatarUrl] = useState(INITIAL_PROFILE.avatarUrl);
   const [regTruckImageUrl, setRegTruckImageUrl] = useState(INITIAL_PROFILE.truckImageUrl);
+  const [regPin, setRegPin] = useState('1234');
+  const [typedPin, setTypedPin] = useState('');
 
   const [notif, setNotif] = useState<{ show: boolean; msg: string; type: 'success' | 'info' }>({
     show: false,
@@ -267,7 +270,8 @@ export default function App() {
       plateCavalo: regPlateCavalo.toUpperCase(),
       plateCarreta: regPlateCarreta.toUpperCase(),
       isOnline: true,
-      anttRate: regAnttRate || 2.50
+      anttRate: regAnttRate || 2.50,
+      pin: regPin || '1234'
     };
     setProfile(newProfile);
     triggerNotification('Cadastro realizado com sucesso! Bem-vindo ao EstadiaCerta.');
@@ -284,6 +288,7 @@ export default function App() {
     setRegAnttRate(INITIAL_PROFILE.anttRate || 2.50);
     setRegAvatarUrl(INITIAL_PROFILE.avatarUrl);
     setRegTruckImageUrl(INITIAL_PROFILE.truckImageUrl);
+    setRegPin('1234');
     triggerNotification('Dados de teste preenchidos. Basta clicar em Cadastrar!', 'info');
   };
 
@@ -320,8 +325,16 @@ export default function App() {
   // Lockscreen Simulated Authentication Click
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
+    if (!profile) return;
+    const correctPin = profile.pin || '1234';
+    if (typedPin !== correctPin) {
+      alert('PIN incorreto! Por favor, digite o PIN que você cadastrou.');
+      setTypedPin('');
+      return;
+    }
     setIsLoggedOut(false);
-    triggerNotification('Bem-vindo de volta, ' + profile?.fullName + '!');
+    setTypedPin('');
+    triggerNotification('Bem-vindo de volta, ' + profile.fullName + '!');
   };
 
   if (!profile) {
@@ -509,6 +522,23 @@ export default function App() {
               </div>
             </div>
 
+            {/* SENHA PIN */}
+            <div className="space-y-1.5 text-left">
+              <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
+                Senha PIN de Acesso (4 dígitos) *
+              </label>
+              <input 
+                type="text"
+                required
+                pattern="\\d{4}"
+                placeholder="Ex: 1234"
+                value={regPin}
+                onChange={(e) => setRegPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                maxLength={4}
+                className="w-full h-12 bg-background border border-outline-variant/60 rounded-xl px-4 font-mono text-on-surface focus:outline-none focus:border-safety-yellow transition-all text-sm tracking-widest text-center font-bold"
+              />
+            </div>
+
             {/* Taxa ANTT / Tonelada Hora */}
             <div className="space-y-1.5 text-left">
               <label className="font-mono text-[10px] text-on-surface-variant tracking-wider uppercase pl-1 font-bold">
@@ -601,9 +631,12 @@ export default function App() {
             </label>
             <input 
               type="password" 
-              value="••••" 
-              readOnly
-              className="w-full h-14 bg-background border-2 border-outline-variant/60 rounded-xl px-4 text-center font-bold font-sans tracking-widest text-lg disabled:opacity-50"
+              placeholder="Digite o PIN"
+              value={typedPin}
+              onChange={(e) => setTypedPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              maxLength={4}
+              required
+              className="w-full h-14 bg-background border-2 border-outline-variant/60 rounded-xl px-4 text-center font-bold font-sans tracking-widest text-lg focus:outline-none focus:border-safety-yellow transition-all"
             />
           </div>
 

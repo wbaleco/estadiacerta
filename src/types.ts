@@ -48,4 +48,5 @@ export interface DriverProfile {
   plateCarreta: string;
   isOnline: boolean;
   anttRate?: number;
+  pin?: string;
 }
